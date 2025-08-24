@@ -1,0 +1,12 @@
+[project]
+name = "sput"
+version = "0.1.0"
+description = "Robotic dog files directory"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "gpiozero>=2.0.1",
+    "lgpio>=0.2.2.0",
+    "pigpio>=1.78",
+    "rpi-gpio>=0.7.1",
+]
