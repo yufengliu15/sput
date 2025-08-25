@@ -1,4 +1,4 @@
-# sput
+# SPUT - Simple Programmable Universal Terrier 
 robot dog from scratch. 
 
 ## goals
