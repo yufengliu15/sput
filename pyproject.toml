@@ -5,6 +5,8 @@ description = "Robotic dog files directory"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
+    "adafruit-circuitpython-pca9685>=3.4.19",
+    "adafruit-circuitpython-servokit>=1.3.21",
     "gpiozero>=2.0.1",
     "lgpio>=0.2.2.0",
     "pigpio>=1.78",

@@ -1,43 +1,36 @@
-from gpiozero import Servo
-from time import sleep
-import os
+#!/usr/bin/env python3
+import time
+import math
+from adafruit_servokit import ServoKit
 
-if os.geteuid() != 0:
-    print("Please run with sudo")
-    exit(1)
+# Initialize the ServoKit with 16 channels
+kit = ServoKit(channels=16)
 
-# Start with standard values and adjust
-# Standard servo: 0.5ms to 2.5ms pulses
-# But many servos can handle 0.4ms to 2.6ms or even wider
+# Configure servos with your specific pulse widths (in microseconds)
+kit.servo[0].set_pulse_width_range(400, 1800)  # Hip servo
+kit.servo[1].set_pulse_width_range(500, 2000)  # Tibia servo
 
-print("Servo Calibration Test")
-print("=" * 40)
+timeBetween = 2
 
-# Test different pulse widths
-test_widths = [
-    (0.4, 1.8, "Standard range")
-]
-   
+# Test movement
 try:
-    servo = Servo(
-        12,
-        min_pulse_width=test_widths[0][0]/1000,  # Convert ms to seconds
-        max_pulse_width=test_widths[0][1]/1000
-    )
+    while True:
+        print("Resetting")
+        # Move to 2 degrees
+        kit.servo[0].angle = 10
+        kit.servo[1].angle = 2
+        time.sleep(timeBetween)
+        
+        print("Slowly increasing")
+        start_time = time.time()
+        for i in range(101):
+            t = i / 100
+            ease = (1 - math.cos(t * math.pi)) / 2
+            kit.servo[0].angle = 180 * ease
+            kit.servo[1].angle = 180 * ease
+            time.sleep(0.03)
+except KeyboardInterrupt:
+    print("\nDisabling servos...")
+    kit.servo[0].angle = None
+    kit.servo[1].angle = None          
     
-    print("  Moving to MIN...")
-    servo.min()
-    sleep(2)
-    
-    print("  Moving to MID...")
-    servo.mid()
-    sleep(2)
-    
-    print("  Moving to MAX...")
-    servo.max()
-    sleep(2)
-    
-    servo.close()
-            
-except Exception as e:
-    print(f"  Error: {e}")
